@@ -40,18 +40,26 @@ app.post("/api/tasks", async (req, res) => {
   res.status(201).json(task);
 });
 
-app.put("/api/tasks", async (req, res) =>{
+app.put("/api/tasks/:id", async (req, res) =>{
     // const task = { id: Date.now(), title: req.body.title, completed: false, totalTime};
-    const tasks = await prisma.task.update({
-    where: {id: parseInt(req.params.id) },
-    data: {
-      completed: req.body.completed,
-      progress: req.body.progress
-    },
+
+    const id = parseInt(req.params.id);
+
+    const updatedTask = await prisma.task.update({
+      where: { id },
+      data: {
+        title: req.body.title,
+        completed: req.body.completed,
+        progress: req.body.progress,
+        totalTime: req.body.totalTime,
+        timerActive: req.body.timerActive,
+        startTime: req.body.startTime
+      },
     });
-    res.json(task);
+
+    res.json(updatedTask);
+
     // tasks.push(task);
-    res.status(201).json(task);
 });
 
 // app.put("/api/tasks/:id", async (req, res) => {
